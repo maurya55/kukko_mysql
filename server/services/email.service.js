@@ -20,7 +20,7 @@ exports.sendEmail = async (data, res) => {
         var mailOptions = {
             from: process.env.SENT_EMAIL,
             to: data.email,
-            subject: 'Sending Email using Node.js',
+            subject: data.subject,
             html: data.template
         };
 

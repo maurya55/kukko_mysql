@@ -1,5 +1,7 @@
 
 const { check } = require("express-validator");
+// const ObjectId = require('mongoose').Types.ObjectId;
+
 
 exports.register = [
     check("name", "name field is required")
@@ -25,5 +27,31 @@ exports.register = [
                 return val;
             }
         })
+
+]
+
+
+//===========otp validation===========
+exports.verifyOtp=[
+    check("otp","valid otp is required")
+    .notEmpty()
+    .trim()
+    .isLength({min: 4, max:4}),
+    check("id","id is required")
+    .notEmpty()
+    .trim()
+]
+
+
+//======login validation=======
+
+exports.login=[
+    check("email","email is required")
+    .notEmpty()
+    .trim(),
+    check("password","password is required")
+    .notEmpty()
+    .trim()
+    
 
 ]

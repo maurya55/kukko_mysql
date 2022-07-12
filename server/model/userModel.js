@@ -28,12 +28,7 @@ module.exports = (sequelize, type) => {
             defaultValue: null,
             after: "password"
         },
-        age: {
-            type: type.INTEGER,
-            defaultValue: null,
-            after: "mobile"
-        },
-        verifiedOtp: {
+         verifiedOtp: {
             type: type.STRING,
             defaultValue: null,
             after: "age"

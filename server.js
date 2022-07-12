@@ -1,43 +1,33 @@
 const express=require("express");
 const app=express();
 require("dotenv").config();
-const PORT=process.env.PORT || 4400 ;
 require("./server/model/configModel");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const cluster = require('cluster');
-const os=require('os');
+var cors = require('cors')
+var hpp = require('hpp');
+const NodeRSA = require('node-rsa');
+const key = new NodeRSA({b: 512});
+var xss = require('xss-clean')
+const mongoSanitize = require('express-mongo-sanitize');
 
 const v1Router=require("./server/router/index");
+const {GoogleSocialLogin,FacebookSocialLogin}=require("./app/social");
+const {cluster}=require("./app/cluster");
+const swagger=require("./app/swagger");
 
 
 
 
-const numCPUs = os.cpus().length;
-// console.log(os.cpus());
-// console.log(numCPUs);
-if (cluster.isMaster) {
-    console.log(`Master ${process.pid} is running`);
-   
-    // Fork workers.
-    for (let i = 0; i < numCPUs; i++) {
-      cluster.fork();
-    }
-   
-    // This event is firs when worker died
-    cluster.on('exit', (worker, code, signal) => {
-      console.log(`worker ${worker.process.pid} died`);
-    });
-  }
-  else{
+  
+  // const text = 'Hello RSA!';
+  // const encrypted = key.encrypt(text, 'base64');
+  // console.log('encrypted: ', encrypted);
+  // const decrypted = key.decrypt(encrypted, 'utf8');
 
-    app.listen(PORT,()=>{
-        console.log(`App is listen of port ${PORT}`);
-    })
 
-  }
-
+  // console.log('decrypted: ', decrypted);
 
 // app.listen(PORT,()=>{
 //     console.log(`App is listen of port ${PORT}`);
@@ -45,20 +35,33 @@ if (cluster.isMaster) {
 
 
 
+cluster(app);
 
+GoogleSocialLogin(app);
+FacebookSocialLogin(app);
+
+swagger(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan('dev'));
+app.use(hpp());
+app.use(xss());
+app.use(mongoSanitize());
+app.use(cors());
 
 
 
 
+//============router==========
 v1Router(app);
 
-
-
+//==============api not fund =============
+app.use("*",(req,res)=>{
+  res.status(200)
+  throw new Error('api not found '+ `${req.originalUrl}`);
+})
 //==========error handling =========
 
 app.use((err,req,res,next)=>{

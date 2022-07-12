@@ -7,7 +7,7 @@ exports.errorHandling=(err,req,res,next)=>{
     })
   }
 
-// exports.notFound=(req,res)=>{
-//     res.status(200)
-//     throw new Error('api not found '+ `${req.originalUrl}`);
-// }
+exports.notFound=(req,res)=>{
+    res.status(200)
+    throw new Error('api not found '+ `${req.originalUrl}`);
+}
