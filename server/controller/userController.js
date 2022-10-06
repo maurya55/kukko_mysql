@@ -6,6 +6,7 @@ const { validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler')
 const emailService = require("../services/email.service");
 const { emailTemplate } = require("../template/register");
+const {sendTextSms}=require("../services/twilioSendSms.services");
 const becrypt = require("../services/bcrypt.service");
 const { webToken } = require("../services/token.service");
 const { v4: uuidv4 } = require('uuid')
@@ -19,7 +20,7 @@ exports.register = asyncHandler(async (req, res) => {
             errors: errors.array()
         });
     }
-    console.log(req.body);
+    // console.log(req.body);
     // throw new Error("password and confirm password not match");
 
     const { name, email, mobile, password } = req.body;
@@ -43,7 +44,7 @@ exports.register = asyncHandler(async (req, res) => {
         }
 
         let becryptOtp = await becrypt.becryptData(otp);
-        console.log(otp);
+        console.log("otp is "+otp);
         const resData = await userModel.create({
             name: name,
             email: email,
@@ -68,7 +69,12 @@ exports.register = asyncHandler(async (req, res) => {
                 email: email,
                 subject: "Kukko Registration Otp"
             }
+            let message=`kukoo verification code ${otp}`;
 
+            //  send otp  to mobile
+            // let sendSms=await sendTextSms(mobile,message);
+
+            //  send otp  to email
             let sendEmail = await emailService.sendEmail(emailData, res);
             let statuCode = sendEmail.status ? 200 : 500;
 

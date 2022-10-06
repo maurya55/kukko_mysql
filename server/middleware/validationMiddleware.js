@@ -7,6 +7,9 @@ exports.register = [
     check("name", "name field is required")
         .notEmpty()
         .trim(),
+    check("mobile", "mobile field is required")
+        .notEmpty()
+        .trim(),
     check("email", "email is required")
         .isEmail(),
     check("password", "password is required")
@@ -17,9 +20,8 @@ exports.register = [
         .trim()
         .custom((val, { req, loc, path }) => {
             if (true) {
-                if(val!=req.body.password)
-                {
-                   
+                if (val != req.body.password) {
+
                     throw new Error("password and confirm password not match");
                 }
                 // console.log(val,req.body.password); 
@@ -32,26 +34,26 @@ exports.register = [
 
 
 //===========otp validation===========
-exports.verifyOtp=[
-    check("otp","valid otp is required")
-    .notEmpty()
-    .trim()
-    .isLength({min: 4, max:4}),
-    check("id","id is required")
-    .notEmpty()
-    .trim()
+exports.verifyOtp = [
+    check("otp", "valid otp is required")
+        .notEmpty()
+        .trim()
+        .isLength({ min: 4, max: 4 }),
+    check("id", "id is required")
+        .notEmpty()
+        .trim()
 ]
 
 
 //======login validation=======
 
-exports.login=[
-    check("email","email is required")
-    .notEmpty()
-    .trim(),
-    check("password","password is required")
-    .notEmpty()
-    .trim()
-    
+exports.login = [
+    check("email", "email is required")
+        .notEmpty()
+        .trim(),
+    check("password", "password is required")
+        .notEmpty()
+        .trim()
+
 
 ]

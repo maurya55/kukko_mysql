@@ -11,11 +11,15 @@
     },
     "servers": [
         {
-          "url": "http://localhost:4400/",
-          "description": "Local server"
+            "url": "http://localhost:4400/",
+            "description": "Local server"
         }
-      ],
+    ],
     "tags": [
+        {
+            "name": "Auth",
+            "description": "register user"
+        },
         {
             "name": "Users",
             "description": "API for users"
@@ -24,43 +28,37 @@
     "produces": [
         "application/json"
     ],
-    "consumes": [
-        "application/json"
-    ],
     "paths": {
         "/mob/v1/register": {
             "post": {
                 "tags": [
-                    "Register new user"
+                    "Auth"
                 ],
                 "summary": "Register new User",
                 "consumes": [
                     "application/json"
                 ],
-                "produces": [
-                    "application/json"
-                ],                
                 "parameters": [
                     {
-                        "name": "name"
+                        "name":"authentication",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true,
+                        "type": "string"
                     },
                     {
-                        "name": "email"
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
                     }
                 ],
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {
-                                "$ref": "#/definitions/Users"
-                            }
-                        },
-                        "application/xml": {
-                            "schema": {
-                                "$ref": "#/definitions/Users"
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
                             "schema": {
                                 "$ref": "#/definitions/Users"
                             }
@@ -78,6 +76,7 @@
             }
         },
         "/user": {
+            "tags":["Users"],
             "parameters": [
                 {
                     "name": "id",
@@ -117,10 +116,6 @@
                 "isVerified"
             ],
             "properties": {
-                "id": {
-                    "type": "integer",
-                    "uniqueItems": true
-                },
                 "name": {
                     "type": "string"
                 },
@@ -130,37 +125,11 @@
                 "password": {
                     "type": "string"
                 },
-                "mobile": {
-                    "type": "integer"
-                },
-                "age": {
-                    "type": "integer"
-                },
-                "verifiedOtp": {
+                "confirm_password": {
                     "type": "string"
                 },
-                "otpExpire": {
+                "mobile": {
                     "type": "integer"
-                },
-                "isVerified": {
-                    "type": "boolean"
-                },
-                "address": {
-                    "type": "object",
-                    "properties": {
-                        "street": {
-                            "type": "string"
-                        },
-                        "suite": {
-                            "type": "string"
-                        },
-                        "city": {
-                            "type": "string"
-                        },
-                        "zipcode": {
-                            "type": "string"
-                        }
-                    }
                 }
             }
         }

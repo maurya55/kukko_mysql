@@ -11,9 +11,9 @@ const NodeRSA = require('node-rsa');
 const key = new NodeRSA({b: 512});
 var xss = require('xss-clean')
 const mongoSanitize = require('express-mongo-sanitize');
-
+const winston = require('winston');
 const v1Router=require("./server/router/index");
-const {GoogleSocialLogin,FacebookSocialLogin}=require("./app/social");
+const {GoogleSocialLogin,FacebookSocialLogin,GoogleSocialTokenVerify}=require("./app/social");
 const {cluster}=require("./app/cluster");
 const swagger=require("./app/swagger");
 
@@ -36,7 +36,7 @@ const swagger=require("./app/swagger");
 
 
 cluster(app);
-
+// GoogleSocialTokenVerify(app);
 GoogleSocialLogin(app);
 FacebookSocialLogin(app);
 
@@ -50,6 +50,9 @@ app.use(hpp());
 app.use(xss());
 app.use(mongoSanitize());
 app.use(cors());
+
+
+//===========use winston logger=============
 
 
 
@@ -77,3 +80,16 @@ app.use((err,req,res,next)=>{
 
 
 
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
+});
+
+logger.add(new winston.transports.Console({
+  format: winston.format.simple(),
+}));
