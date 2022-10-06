@@ -3,7 +3,7 @@ const sequelize=require("../config/config");
 
 
 
-// sequelize.sync();
+sequelize.sync();
 // sequelize.sync({alter:true});
 
 

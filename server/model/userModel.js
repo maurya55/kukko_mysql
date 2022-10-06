@@ -16,32 +16,32 @@ module.exports = (sequelize, type) => {
         email: {
             type: type.STRING,
             allowNull: false,
-            after: "name"
+            // after: "name"
         },
         password: {
             type: type.STRING,
             allowNull: false,
-            after: "email"
+            // after: "email"
         },
         mobile: {
             type: type.BIGINT,
             defaultValue: null,
-            after: "password"
+            // after: "password"
         },
          verifiedOtp: {
             type: type.STRING,
             defaultValue: null,
-            after: "age"
+            // after: "age"
         },
         otpExpire: {
             type: type.BIGINT,
             defaultValue: null,
-            after: "verifiedOtp"
+            // after: "verifiedOtp"
         },
         isVerified: {
             type: type.BOOLEAN,
             defaultValue: false,
-            after: "otpExpire"
+            // after: "otpExpire"
         },
 
 
